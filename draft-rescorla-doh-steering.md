@@ -1,11 +1,11 @@
 ---
 title: "Sterring DNS over HTTPS Resolution"
 abbrev: "DoH Steering"
-docname: draft-rescorla-doh-steering
+docname: draft-rescorla-doh-steering-latest
 category: info
 
 ipr: trust200902
-area: Internet
+area: Internet  
 keyword: Internet-Draft
 
 stand_alone: yes
