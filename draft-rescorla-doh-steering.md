@@ -179,7 +179,27 @@ this approach depending on the results of that.
 
 # Security Considerations
 
-TODO Security
+Because the initial request for steering information is done over
+insecure DNS, a local attacker or malicious local resolver can
+substitute their own response. However, because this mechanism only
+selects between preconfigured trusted resolvers, an attacker can only
+steer you to a different resolver out of that list, which by
+definition is also trusted. If the server which is steered to is not
+publicly available, this mechanism can be used as a DoS
+attack. Clients should test the selected server before committing to
+it and otherwise fall back to the ordinary DoH selection logic.
+
+Any local steering mechanism has potential privacy impacts: suppose
+that a user uses their mobile device on ISP A, which steers to their
+own resolver, and ISP B which does not.  In that case, the user's
+browsing history will be spread over both ISP A's resolver and one of
+the public trusted resolvers, which has an impact on the user's
+privacy. This has to be balanced against the improvement obtained by a
+local resolver and the level of metadata leakage that currently occurs
+to the ISP.
+
+
+
 
 
 # IANA Considerations
