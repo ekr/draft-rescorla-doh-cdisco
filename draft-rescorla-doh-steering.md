@@ -1,5 +1,5 @@
 ---
-title: "Sterring DNS over HTTPS Resolution"
+title: "Steering DNS over HTTPS Resolution"
 abbrev: "DoH Steering"
 docname: draft-rescorla-doh-steering-latest
 category: info
@@ -41,7 +41,7 @@ provider network has a DNS over HTTPS {{!RFC8484}} server on it.
 
 Some applications perform their own name resolution rather than using
 the system resolver, typically using an encrypted protocol such as DoH
-{{RFC8484}] These applications have the choice of using either the
+{{RFC8484}} These applications have the choice of using either the
 same recursive resolver configured into the system or of using a
 resolver chosen out of a preconfigured list of trusted resolvers as in
 {{DOHTRR}}.
@@ -60,7 +60,7 @@ topology.
 
 This document describes a mechanism to address this situation.
 This mechanism is being actively tested in the Firefox browser
-with [REDACTED]'s resolvers.
+with \[REDACTED]'s resolvers.
 
 
 # Conventions and Definitions
@@ -98,11 +98,11 @@ A network provider can publish the fact that it has an associated DoH
 resolver on its network by configuring its own resolvers to server a
 CNAME record at a well known domain name which cannot be otherwise
 registered. In our current test deployment we use "doh.test" (see
-{{!RFC2606}} for the definition of .test}}). This CNAME points to the
+{{!RFC2606}} for the definition of .test). This CNAME points to the
 domain name of the associated DoH resolver ("resolver.example" in the
 diagram above).
 
-[[OPEN ISSUE: doh.test is probably the wrong domain. We may pick
+\[\[OPEN ISSUE: doh.test is probably the wrong domain. We may pick
 something else later.]]
 
 A client which wishes to test for the presence of a DoH resolver on
