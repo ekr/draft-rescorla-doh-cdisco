@@ -32,7 +32,7 @@ informative:
 --- abstract
 
 This note describes a simple mechanism for determining whether a
-provider network has a DNS over HTTPS {{!RFC8484}} server on it.
+provider network offers a DNS over HTTPS {{!RFC8484}} server.
 
 
 --- middle
@@ -95,9 +95,9 @@ doh.test -> resolver.example -> | ISP Resolver |
 
 
 A network provider can publish the fact that it has an associated DoH
-resolver on its network by configuring its own resolvers to server a
+resolver on its network by configuring its own resolvers to serve a
 CNAME record at a well known domain name which cannot be otherwise
-registered. In our current test deployment we use "doh.test" (see
+registered. The current test deployment uses "doh.test" (see
 {{!RFC2606}} for the definition of .test). This CNAME points to the
 domain name of the associated DoH resolver ("resolver.example" in the
 diagram above).
@@ -116,12 +116,12 @@ the network takes the following steps:
    or by talking directly to the recursive resolver IP address configured
    into the system.
 
-1. If the query succeeds, then look up the CNAME in the list of
-   preconfigured resolvers. If a match is found then use the
-   resolver address for the matching preconfigured resolver. Otherwise
-   fall back to the ordinary DoH resolver selection logic.
+1. If the query succeeds, then look up the CNAME record value in the list
+   of preconfigured resolvers. If an exact match is found, then use the
+   resolver address for the matching preconfigured resolver.
+   Otherwise fall back to the ordinary DoH resolver selection logic.
 
-1. If the query fails then no associated resolver is present;
+1. If the query fails, then no associated resolver is present;
    fall back to the ordinary DoH resolver selection logic.
 
 As noted above, this mechanism was designed for ease of implementation.
@@ -138,8 +138,9 @@ deployment drawbacks:
 
 - They require the client to have much tighter integration with the
   operating system in order to query the data. By contrast, with
-  this mechanism, the client need only be able to do name resolution,
-  which it generally already is able to do.
+  this mechanism, the client need only be able to do name resolution via
+  the system resolver, which it generally already is able to do via
+  standard APIs.
 
 - They require new types of configuration which ISPs may not already
   be set up to do. By contrast, configuring DNS records is generally
@@ -149,33 +150,33 @@ deployment drawbacks:
   configuration information and passing it onto clients. These
   devices already do this with DNS information.
 
-For this reason we believe that DNS is the easiest solution to deploy
+For these reasons, DNS seems to be the easiest solution to deploy
 quickly.
 
 
 ## Why a CNAME?
 
-Most other proposed designs (e.g., {{?I-D.pp-add-resinfo}},
+Most other proposed designs (e.g., {{?I-D.pp-add-resinfo}} and
 {{?I-D.pp-add-stub-upgrade}}, and
 {{I-D.pauly-add-resolver-discovery}}) use new RRtypes. While this may
 be the right answer eventually, it is less convenient for immediate
-deployment for several reasons:
+deployment, for several reasons:
 
 1. It is somewhat more difficult (though not impossible) to look up
 new RRTypes on the client and provision them on the ISP resolver.
 
-1. We have concerns about how frequently consumer-grade middleboxes
-(e.g., WiFI routers) block unknown RRTypes. The data here is quite
-old and limited, but still not particularly promising.
+1. Some consumer-grade middleboxes (e.g., WiFI routers) may block
+unknown RRTypes. The data here is quite old and limited, but still
+not particularly promising.
 
 The choice to use a CNAME does have one major drawback: it does
-not let us provide the URL template but only the name of the resolver.
-This is not a problem for our system in practice because we will
-only connect to resolvers on our preconfigured list and thus
-we can use the CNAME as our lookup key for that list. We are working
-to measure the rate of new RRType interference and may revise
-this approach depending on the results of that.
+not let one provide the URL template but only the name of the resolver.
+This is not a problem for systems using this technique in practice because
+they will connect to resolvers on a preconfigured list and thus use the
+CNAME record value as a lookup key for that list.
 
+\[\[OPEN ISSUE: We are working to measure the rate of new RRType interference
+and may revise this approach depending on the results of that.]]
 
 # Security Considerations
 
