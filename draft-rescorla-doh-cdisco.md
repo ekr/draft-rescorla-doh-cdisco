@@ -223,8 +223,8 @@ that a user uses their mobile device on ISP A, which redirects it to their
 own resolver, and ISP B which does not.  In that case, the user's
 DNS queries will be spread over both ISP A's resolver and one of
 the public trusted resolvers, which could have an impact on the user's
-privacy. This has to be balanced against the improvement obtained by a
-local resolver and the level of metadata leakage that currently occurs
+privacy. This has to be balanced against the improvement obtained by
+using a local resolver and the level of metadata leakage that currently occurs
 to the ISP, but can be mitigated through trusted recursive resolver 
 policies.
 
