@@ -219,7 +219,7 @@ attack. Application clients should test the selected server before committing to
 it and otherwise fall back to their ordinary DoH selection logic.
 
 Any local discovery mechanism has potential privacy impacts: suppose
-that a user uses their mobile device on ISP A, which redirects itto their
+that a user uses their mobile device on ISP A, which redirects it to their
 own resolver, and ISP B which does not.  In that case, the user's
 DNS queries will be spread over both ISP A's resolver and one of
 the public trusted resolvers, which could have an impact on the user's
