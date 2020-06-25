@@ -1,7 +1,7 @@
 ---
-title: "Steering DNS over HTTPS Resolution"
-abbrev: "DoH Steering"
-docname: draft-rescorla-doh-steering-latest
+title: "CNAME Discovery of Local DoH Resolvers"
+abbrev: "CNAME DoH Discovery"
+docname: draft-rescorla-doh-cdisco-latest
 category: info
 
 ipr: trust200902
@@ -64,9 +64,9 @@ of using a DNS resolver with a known policy and using a resolver
 that has high quality local information about the local network
 topology.
 
-This document describes a mechanism to address this situation.
-This mechanism is being actively tested in the Firefox browser
-with \[REDACTED]'s resolvers.
+This document describes a mechanism to address this situation. This
+mechanism is being tested in the Firefox browser with Comcast's
+resolvers.
 
 
 # Conventions and Definitions
@@ -132,7 +132,7 @@ the network takes the following steps:
 
 As noted above, this mechanism was designed for ease of implementation.
 
-\[REDACTED]'s resolvers and authoritative servers have been configured 
+Comcast's resolvers and authoritative servers have been configured 
 with some additional records to support the Firefox applications and potential  
 future applications. The DNS behavior is as follows, where example.com is the 
 domain used for naming provider services:
@@ -202,20 +202,20 @@ and may revise this approach depending on the results of that.]]
 
 # Security Considerations
 
-Because the initial request for steering information is done over
+Because the initial request for discovery is done over
 insecure DNS (Do53), a local attacker or malicious local resolver can
 substitute their own response. However, because this mechanism only
 selects from a list of preconfigured trusted resolvers, an attacker can only
-steer you to a different resolver out of that list, which by
+redirect you to a different resolver out of that list, which by
 definition is also trusted. 
 
-If the server which is steered to is not
+If the server which is redirected to is not
 publicly available, this mechanism can be used as a DoS
 attack. Application clients should test the selected server before committing to
 it and otherwise fall back to their ordinary DoH selection logic.
 
-Any local steering mechanism has potential privacy impacts: suppose
-that a user uses their mobile device on ISP A, which steers to their
+Any local discovery mechanism has potential privacy impacts: suppose
+that a user uses their mobile device on ISP A, which redirects itto their
 own resolver, and ISP B which does not.  In that case, the user's
 DNS queries will be spread over both ISP A's resolver and one of
 the public trusted resolvers, which could have an impact on the user's
