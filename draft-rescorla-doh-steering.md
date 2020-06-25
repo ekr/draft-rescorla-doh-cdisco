@@ -17,6 +17,11 @@ author:
     name: Eric Rescorla
     organization: Mozilla
     email: ekr@rtfm.com
+    
+    ins: J. Livingood
+    name: Jason Livingood
+    organization: Comcast
+    email: jason_livingood@comcast.com
 
 normative:
   RFC2119:
@@ -31,8 +36,9 @@ informative:
 
 --- abstract
 
-This note describes a simple mechanism for determining whether a
-provider network offers a DNS over HTTPS {{!RFC8484}} server.
+This note describes a simple mechanism for determining whether an Internet Service
+Provider (ISP) network is operating a DNS over HTTPS {{!RFC8484}} server on it for users 
+connected to that network.
 
 
 --- middle
@@ -41,16 +47,16 @@ provider network offers a DNS over HTTPS {{!RFC8484}} server.
 
 Some applications perform their own name resolution rather than using
 the system resolver, typically using an encrypted protocol such as DoH
-{{RFC8484}} These applications have the choice of using either the
+{{RFC8484}}. These applications have the choice of using either the
 same recursive resolver configured into the system or of using a
-resolver chosen out of a preconfigured list of trusted resolvers as in
-{{DOHTRR}}.
+resolver chosen out of a preconfigured list of trusted resolvers in 
+an application, such as in {{DOHTRR}}.
 
 If all of the trusted resolvers are publicly available, then there
 are a number of mechanisms for choosing between them, for instance
 randomly or based on performance. {{?I-D.arkko-abcd-distributed-resolver-selection}}
 describes a number of potential mechanisms. However, if the
-list of trusted resolvers includes Internet Service Providers
+list of trusted resolvers includes Internet Service Providers (ISPs)
 and the client is on a network associated with such a provider,
 then it may be desirable to preferentially select the resolver
 associated with that provider. This provides the benefits both
@@ -112,19 +118,28 @@ the network takes the following steps:
    for canary domains {{!I-D.grover-add-policy-detection}} or checking for
    local enterprise configuration.
 
-1. Do a CNAME query for "doh.test" using either the system resolver
+2. Do a CNAME query for "doh.test" using either the system resolver
    or by talking directly to the recursive resolver IP address configured
    into the system.
 
-1. If the query succeeds, then look up the CNAME record value in the list
+3. If the query succeeds, then look up the CNAME record value in the list
    of preconfigured resolvers. If an exact match is found, then use the
    resolver address for the matching preconfigured resolver.
    Otherwise fall back to the ordinary DoH resolver selection logic.
 
-1. If the query fails, then no associated resolver is present;
+3. If the query fails, then no associated resolver is present;
    fall back to the ordinary DoH resolver selection logic.
 
 As noted above, this mechanism was designed for ease of implementation.
+
+\[REDACTED]'s resolvers and authoritative servers have been configured 
+with some additional records to support the Firefox applications and potential  
+future applications. The DNS behavior is as follows, where example.com is the 
+domain used for naming provider services:
+1. doh.test IN CNAME doh-discovery.example.com
+2. doh-discovery.example.com must have at least one A and/or AAAA RR (address does not matter - can be 127.0.0.1)
+3. doh-discovery.example.com IN URI https://doh.example.com/dns-query (the ISP DoH URI - not currently used by Firefox as the URI is preconfigured in the application)
+
 The next few sections describe the reasoning for some of the design
 choices.
 
@@ -170,15 +185,17 @@ deployment, for several reasons:
 1. It is somewhat more difficult (though not impossible) to look up
 new RRTypes on the client and provision them on the ISP resolver.
 
-1. Some consumer-grade middleboxes (e.g., WiFI routers) may block
+2. Some consumer-grade middleboxes (e.g., WiFI routers) may block
 unknown RRTypes. The data here is quite old and limited, but still
 not particularly promising.
 
 The choice to use a CNAME does have one major drawback: it does
-not let one provide the URL template but only the name of the resolver.
-This is not a problem for systems using this technique in practice because
-they will connect to resolvers on a preconfigured list and thus use the
-CNAME record value as a lookup key for that list.
+not let us provide the URL template but only the name of the resolver.
+This is not a problem for our system in practice because Firefox will
+only connect to resolvers on a preconfigured list and thus
+will use the CNAME as a lookup key for that list. The Mozilla team is working
+to measure the rate of new RRType interference and may revise
+this approach depending on the results of that.
 
 \[\[OPEN ISSUE: We are working to measure the rate of new RRType interference
 and may revise this approach depending on the results of that.]]
@@ -186,26 +203,26 @@ and may revise this approach depending on the results of that.]]
 # Security Considerations
 
 Because the initial request for steering information is done over
-insecure DNS, a local attacker or malicious local resolver can
+insecure DNS (Do53), a local attacker or malicious local resolver can
 substitute their own response. However, because this mechanism only
-selects between preconfigured trusted resolvers, an attacker can only
+selects from a list of preconfigured trusted resolvers, an attacker can only
 steer you to a different resolver out of that list, which by
-definition is also trusted. If the server which is steered to is not
+definition is also trusted. 
+
+If the server which is steered to is not
 publicly available, this mechanism can be used as a DoS
-attack. Clients should test the selected server before committing to
-it and otherwise fall back to the ordinary DoH selection logic.
+attack. Application clients should test the selected server before committing to
+it and otherwise fall back to their ordinary DoH selection logic.
 
 Any local steering mechanism has potential privacy impacts: suppose
 that a user uses their mobile device on ISP A, which steers to their
 own resolver, and ISP B which does not.  In that case, the user's
-browsing history will be spread over both ISP A's resolver and one of
-the public trusted resolvers, which has an impact on the user's
+DNS queries will be spread over both ISP A's resolver and one of
+the public trusted resolvers, which could have an impact on the user's
 privacy. This has to be balanced against the improvement obtained by a
 local resolver and the level of metadata leakage that currently occurs
-to the ISP.
-
-
-
+to the ISP, but can be mitigated through trusted recursive resolver 
+policies.
 
 
 # IANA Considerations
