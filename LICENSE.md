@@ -1,4 +1,4 @@
 # License
 
 See the
-[guidelines for contributions](https://github.com/ekr/draft-rescorla-doh-steering/blob/master/CONTRIBUTING.md).
+[guidelines for contributions](https://github.com/ekr/draft-rescorla-doh-cdisco/blob/master/CONTRIBUTING.md).
