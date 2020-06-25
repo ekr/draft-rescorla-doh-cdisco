@@ -136,6 +136,7 @@ Comcast's resolvers and authoritative servers have been configured
 with some additional records to support the Firefox applications and potential  
 future applications. The DNS behavior is as follows, where example.com is the 
 domain used for naming provider services:
+
 1. doh.test IN CNAME doh-discovery.example.com
 2. doh-discovery.example.com must have at least one A and/or AAAA RR (address does not matter - can be 127.0.0.1)
 3. doh-discovery.example.com IN URI https://doh.example.com/dns-query (the ISP DoH URI - not currently used by Firefox as the URI is preconfigured in the application)
@@ -202,12 +203,15 @@ and may revise this approach depending on the results of that.]]
 
 # Security Considerations
 
-Because the initial request for discovery is done over
-insecure DNS (Do53), a local attacker or malicious local resolver can
-substitute their own response. However, because this mechanism only
-selects from a list of preconfigured trusted resolvers, an attacker can only
+Because the initial request for discovery is done over insecure DNS
+(Do53), a local attacker or malicious local resolver can substitute
+their own response. However, because this mechanism only selects from
+a list of preconfigured trusted resolvers, an attacker can only
 redirect you to a different resolver out of that list, which by
-definition is also trusted. 
+definition is also trusted. Note: the URI field potentially has
+different security properties depending on how it is used. As noted
+above; Firefox does not use it.
+
 
 If the server which is redirected to is not
 publicly available, this mechanism can be used as a DoS
