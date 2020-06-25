@@ -128,6 +128,11 @@ As noted above, this mechanism was designed for ease of implementation.
 The next few sections describe the reasoning for some of the design
 choices.
 
+Considering that many applications do not act as a DNS client and instead
+use platform functions such as getaddrinfo, the domain of the associated
+resolver SHOULD also have an A record, so the call to getaddrinfo does
+not fail.
+
 ## Why DNS?
 
 There have been a number of discussions of using non-DNS mechanisms
