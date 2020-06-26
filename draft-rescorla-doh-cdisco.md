@@ -212,10 +212,9 @@ definition is also trusted. Note: the URI field potentially has
 different security properties depending on how it is used. As noted
 above; Firefox does not use it.
 
-
-If the server which is redirected to is not
-publicly available, this mechanism can be used as a DoS
-attack. Application clients should test the selected server before committing to
+If the server which is redirected to is on another network, and that
+server is not publicly available, this mechanism can be used as a DoS attack.
+Application clients should test the selected server before committing to
 it and otherwise fall back to their ordinary DoH selection logic.
 
 Any local discovery mechanism has potential privacy impacts: suppose
