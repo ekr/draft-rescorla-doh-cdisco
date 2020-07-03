@@ -132,14 +132,11 @@ the network takes the following steps:
 
 As noted above, this mechanism was designed for ease of implementation.
 
-Comcast's resolvers and authoritative servers have been configured 
-with some additional records to support the Firefox applications and potential  
-future applications. The DNS behavior is as follows, where example.com is the 
-domain used for naming provider services:
+For a network operator's recursive resolvers and authoritative servers, the DNS behavior is as follows, where example.com is the 
+domain used for naming provider services. The specific mechanism for doing so will vary depending what server software is used. 
 
-1. doh.test IN CNAME doh-discovery.example.com
-2. doh-discovery.example.com must have at least one A and/or AAAA RR (address does not matter - can be 127.0.0.1)
-3. doh-discovery.example.com IN URI https://doh.example.com/dns-query (the ISP DoH URI - not currently used by Firefox as the URI is preconfigured in the application)
+1. On the recursive server: configure the server with a pre-loaded response or response policy to respond with a CNAME and other resource records as appropriate rather than performing recursion. This includes doh.test IN CNAME doh-discovery.example.com.
+2. On the authoritative server: doh-discovery.example.com must have at least one A and/or AAAA RR (address does not matter - can be 127.0.0.1). This might also be performed on the recursive server, depending again on the software being used.
 
 The next few sections describe the reasoning for some of the design
 choices.
